@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "wondertrade",
+  "version": "${version}",
+  "name": "WonderTrade",
+  "description": "A wondertrade sidemod written for cobblemon",
+  "authors": [
+    "Polymeta"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "Insert License Here",
+  "icon": "assets/examplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.polymeta.wondertrade.fabric.WonderTradeFabric"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "cobblemon": ">=1.3.0"
+  }
+}
