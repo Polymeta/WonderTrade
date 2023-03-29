@@ -1,8 +1,8 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id("org.jetbrains.kotlin.jvm") version("1.8.0")
-    // OPTIONAL Kotlin Serialization plugin
-    id("org.jetbrains.kotlin.plugin.serialization") version("1.8.0")
+    id("dev.architectury.loom")
+    id("architectury-plugin")
+    id("org.jetbrains.kotlin.jvm")
 }
 
 architectury {
@@ -13,12 +13,12 @@ architectury {
 archivesBaseName = rootProject.archives_base_name + "-forge"
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-    }
+    //accessWidenerPath = project(":common").loom.accessWidenerPath
+//
+    //forge {
+    //    convertAccessWideners = true
+    //    extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+    //}
 }
 
 configurations {
@@ -30,11 +30,10 @@ configurations {
 }
 
 dependencies {
-    modules {
-        module("com.cobblemon:mod") {
-            replacedBy("com.cobblemon:forge", "Common module replaced by forge module for build")
-        }
-    }
+
+    minecraft("com.mojang:minecraft:${project.properties["minecraft_version"]}")
+    // The following line declares the mojmap mappings, you may use other mappings as well
+    mappings(loom.officialMojangMappings())
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
@@ -80,19 +79,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }
