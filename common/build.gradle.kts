@@ -21,5 +21,5 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${project.properties["fabric_loader_version"]}")
     // Remove the next line if you don't want to depend on the API
     modApi("dev.architectury:architectury:${project.properties["architectury_version"]}")
-    modImplementation("com.cobblemon:mod:1.3.0+1.19.2-SNAPSHOT")
+    modImplementation("com.cobblemon:mod:1.3.1+1.19.2-SNAPSHOT")
 }
