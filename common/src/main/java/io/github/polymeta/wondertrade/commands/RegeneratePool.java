@@ -25,7 +25,7 @@ public class RegeneratePool {
         dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("regenerate")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
-                                new CobblemonPermission("ondertrade.command.regenerate", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)))
+                                new CobblemonPermission("wondertrade.command.regenerate", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)))
                         .then(Commands.argument("size", IntegerArgumentType.integer(1)).executes(Execute))
                         .executes(ExecuteDefault));
     }
