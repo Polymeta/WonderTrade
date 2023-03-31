@@ -39,7 +39,6 @@ public class WonderTrade {
     public static ScheduledThreadPoolExecutor scheduler;
     public static ForkJoinPool worker;
     private static final Random rng = new Random();
-
     private static final Logger logger = LogManager.getLogger();
 
     public static void init() {
@@ -58,6 +57,7 @@ public class WonderTrade {
 
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> {
             RegeneratePool.register(dispatcher);
+            Trade.register(dispatcher);
         });
         CobblemonEvents.SERVER_STARTED.subscribe(Priority.NORMAL, minecraftServer -> {
             if(WonderTrade.pool.pokemon.isEmpty()) {
