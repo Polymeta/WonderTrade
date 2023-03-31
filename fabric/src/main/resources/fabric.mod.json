@@ -8,11 +8,11 @@
     "Polymeta"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Polymeta",
+    "sources": "https://github.com/Polymeta/WonderTrade"
   },
   "license": "Insert License Here",
-  "icon": "assets/examplemod/icon.png",
+  "icon": "assets/wondertrade/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -22,6 +22,6 @@
   "depends": {
     "fabric": "*",
     "minecraft": ">=1.19.2",
-    "cobblemon": ">=1.3.0"
+    "cobblemon": ">=1.3.1"
   }
 }

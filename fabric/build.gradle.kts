@@ -14,18 +14,25 @@ loom {
     silentMojangMappingsLicense()
     enableTransitiveAccessWideners.set(true)
 }
+
+configurations.all {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
+    }
+}
+
 val shadowCommon = configurations.create("shadowCommon")
 dependencies {
-    minecraft("com.mojang:minecraft:1.19.2")
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.14.14")
+    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
 
-    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:0.75.1+1.19.2")
-    modRuntimeOnly("dev.architectury", "architectury-fabric", "6.5.69")
+    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    modRuntimeOnly("dev.architectury", "architectury-fabric", property("architectury_version").toString()) { isTransitive = false }
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
 
-    modImplementation("com.cobblemon:fabric:1.3.1+1.19.2-SNAPSHOT")
+    modImplementation("com.cobblemon:fabric:1.3.1+1.19.2-SNAPSHOT") { isTransitive = false }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 }
 
