@@ -11,7 +11,7 @@
     "homepage": "https://github.com/Polymeta",
     "sources": "https://github.com/Polymeta/WonderTrade"
   },
-  "license": "Insert License Here",
+  "license": "MIT License",
   "icon": "assets/wondertrade/icon.png",
   "environment": "*",
   "entrypoints": {

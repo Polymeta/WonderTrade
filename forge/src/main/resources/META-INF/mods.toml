@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[43,)"
 issueTrackerURL = "https://github.com/Polymeta/WonderTrade/issues"
-license = "Insert License Here"
+license = "MIT License"
 
 [[mods]]
 modId = "wondertrade"
