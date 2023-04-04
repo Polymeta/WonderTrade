@@ -22,11 +22,13 @@ public class RegeneratePool {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(
+        var regenCommand = dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("regenerate")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
                                 new CobblemonPermission("wondertrade.command.regenerate", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)))
                         .then(Commands.argument("size", IntegerArgumentType.integer(1)).executes(Execute))
-                        .executes(ExecuteDefault));
+                        .executes(ExecuteDefault)
+        );
+        dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("regeneratepool").redirect(regenCommand));
     }
 }

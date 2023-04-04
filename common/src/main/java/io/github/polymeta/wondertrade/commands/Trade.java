@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class Trade {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(
+        var tradeCommand = dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("wondertrade")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
                                 new CobblemonPermission("wondertrade.command.trade.base", PermissionLevel.NONE)))
@@ -35,6 +35,7 @@ public class Trade {
                                 .then(Commands.argument("confirmation", StringArgumentType.greedyString()).executes(ExecuteWithConfirm))
                                 .executes(Execute))
         );
+        dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("wt").redirect(tradeCommand));
     }
 
     private static final Random rng = new Random();
