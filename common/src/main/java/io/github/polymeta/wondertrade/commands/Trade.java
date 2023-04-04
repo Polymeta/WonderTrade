@@ -12,12 +12,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.polymeta.wondertrade.WonderTrade;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
 import java.util.Random;
 import java.util.UUID;
@@ -50,19 +47,11 @@ public class Trade {
                 new CobblemonPermission("wondertrade.command.trade.bypass",
                         PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS));
         if(playersOnCooldown.contains(player.getUUID()) && !canBypass && WonderTrade.config.cooldownEnabled) {
-            player.sendSystemMessage(WonderTrade.PREFIX.copy().append(Component.literal("You are on cooldown!").withStyle(ChatFormatting.RED)));
+            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
             return Command.SINGLE_SUCCESS;
         }
 
-        var text = WonderTrade.PREFIX.copy().append(Component
-                .literal("Are you sure you want to trade your").withStyle(ChatFormatting.WHITE)
-                .append(Component.literal(" lvl: " + slot.getLevel() + " ").setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)))
-                .append(slot.getDisplayName().withStyle(ChatFormatting.AQUA))
-                .append(Component.literal("? ").withStyle(ChatFormatting.WHITE))
-                .append(Component.literal("Click here to confirm!").setStyle(
-                        Style.EMPTY.withColor(ChatFormatting.YELLOW)
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wondertrade " + (slotNo + 1) + " --confirm")))));
-        player.sendSystemMessage(text);
+        player.sendSystemMessage(WonderTrade.config.messages.wonderTradeFeedback(slot, slotNo));
 
         return Command.SINGLE_SUCCESS;
     };
@@ -78,7 +67,7 @@ public class Trade {
                 new CobblemonPermission("wondertrade.command.trade.bypass",
                         PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS));
         if(playersOnCooldown.contains(player.getUUID()) && !canBypass && WonderTrade.config.cooldownEnabled) {
-            player.sendSystemMessage(WonderTrade.PREFIX.copy().append(Component.literal("You are on cooldown!").withStyle(ChatFormatting.RED)));
+            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
             return Command.SINGLE_SUCCESS;
         }
         var playerParty = Cobblemon.INSTANCE.getStorage().getParty(player);
@@ -91,7 +80,12 @@ public class Trade {
             playersOnCooldown.add(player.getUUID());
             WonderTrade.scheduler.schedule(() -> {playersOnCooldown.remove(player.getUUID());}, WonderTrade.config.cooldown, TimeUnit.MINUTES);
         }
-        player.sendSystemMessage(WonderTrade.PREFIX.copy().append(Component.literal("Successfully traded!").withStyle(ChatFormatting.GREEN)));
+        player.sendSystemMessage(WonderTrade.config.messages.successFeedback());
+        var server = player.getServer();
+        var broadcastMessage = WonderTrade.config.messages.broadcastPokemon(slot);
+        if(server != null && !broadcastMessage.equals(Component.empty())) {
+            server.getPlayerList().broadcastSystemMessage(broadcastMessage, false);
+        }
         return Command.SINGLE_SUCCESS;
     };
 

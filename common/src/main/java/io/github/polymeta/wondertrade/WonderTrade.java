@@ -11,9 +11,7 @@ import io.github.polymeta.wondertrade.commands.Trade;
 import io.github.polymeta.wondertrade.configuration.BaseConfig;
 import io.github.polymeta.wondertrade.configuration.Pool;
 import kotlin.Unit;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,14 +28,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class WonderTrade {
     public static final String MOD_ID = "wondertrade";
-    public static final MutableComponent PREFIX = Component.literal("[").withStyle(ChatFormatting.GRAY)
-            .append(Component.literal("Wonder").withStyle(ChatFormatting.WHITE))
-            .append(Component.literal("Trade").withStyle(ChatFormatting.RED))
-            .append(Component.literal("]").withStyle(ChatFormatting.GRAY));
+    public static final MiniMessage miniMessage = MiniMessage.miniMessage();
+
     public static BaseConfig config;
     public static Pool pool;
     public static ScheduledThreadPoolExecutor scheduler;
     public static ForkJoinPool worker;
+
     private static final Random rng = new Random();
     private static final Logger logger = LogManager.getLogger();
 

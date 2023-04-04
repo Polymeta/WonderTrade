@@ -32,6 +32,11 @@ dependencies {
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
 
+    implementation("net.kyori:adventure-text-minimessage:${property("minimessage_version")}")
+    implementation("net.kyori:adventure-text-serializer-gson:${property("minimessage_version")}")
+    shadowCommon("net.kyori:adventure-text-minimessage:${property("minimessage_version")}")
+    shadowCommon("net.kyori:adventure-text-serializer-gson:${property("minimessage_version")}")
+
     modImplementation("com.cobblemon:fabric:1.3.1+1.19.2-SNAPSHOT") { isTransitive = false }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 }
@@ -52,7 +57,7 @@ tasks {
     }
 
     shadowJar {
-        exclude("architectury.common.json")
+        exclude("architectury.common.json", "com/**/*")
         archiveClassifier.set("dev-shadow")
         archiveBaseName.set("wondertrade-${project.name}")
         configurations = listOf(shadowCommon)
