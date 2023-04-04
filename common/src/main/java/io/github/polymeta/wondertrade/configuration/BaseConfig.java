@@ -12,6 +12,9 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BaseConfig {
     public static Gson GSON = new GsonBuilder()
             .disableHtmlEscaping()
@@ -21,6 +24,7 @@ public class BaseConfig {
     public int poolSize = 5;
     public boolean cooldownEnabled = true;
     public int cooldown = 5;
+    public List<String> blacklist = new ArrayList<>();
 
     public MessageConfig messages = new MessageConfig();
 
@@ -28,6 +32,7 @@ public class BaseConfig {
         public String wonderTradeFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <white>Are you sure you want to trade your" +
                 " <aqua>lvl <level> <pokemon></aqua>?<wtconfirm><yellow> Click here to confirm!</wtconfirm>";
         public String cooldownFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <red>You are on cooldown!";
+        public String pokemonNotAllowed = "<gray>[<white>Wonder<red>Trade<gray>] <red>You cannot trade this pokemon!";
         public String successFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <green>Successfully traded!";
         public String broadcastPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<white> <pokemon> got added to the wondertrade pool!";
         public String broadcastShinyPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<yellow> Shiny <pokemon> got added to the wondertrade pool!";
@@ -65,6 +70,11 @@ public class BaseConfig {
             }
             var text = WonderTrade.miniMessage.deserialize(stringMessage,
                     Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+        }
+
+        public Component pokemonNotAllowed() {
+            var text = WonderTrade.miniMessage.deserialize(this.pokemonNotAllowed);
             return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
         }
     }

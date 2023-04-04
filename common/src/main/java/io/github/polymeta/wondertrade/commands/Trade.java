@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.api.storage.party.PartyPosition;
 import com.cobblemon.mod.common.command.argument.PartySlotArgumentType;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -50,7 +51,10 @@ public class Trade {
             player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
             return Command.SINGLE_SUCCESS;
         }
-
+        if(isPokemonForbidden(slot) && !canBypass) {
+            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed());
+            return Command.SINGLE_SUCCESS;
+        }
         player.sendSystemMessage(WonderTrade.config.messages.wonderTradeFeedback(slot, slotNo));
 
         return Command.SINGLE_SUCCESS;
@@ -68,6 +72,10 @@ public class Trade {
                         PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS));
         if(playersOnCooldown.contains(player.getUUID()) && !canBypass && WonderTrade.config.cooldownEnabled) {
             player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
+            return Command.SINGLE_SUCCESS;
+        }
+        if(isPokemonForbidden(slot) && !canBypass) {
+            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed());
             return Command.SINGLE_SUCCESS;
         }
         var playerParty = Cobblemon.INSTANCE.getStorage().getParty(player);
@@ -88,5 +96,14 @@ public class Trade {
         }
         return Command.SINGLE_SUCCESS;
     };
+
+    private static boolean isPokemonForbidden(Pokemon pokemon) {
+        for (String property : WonderTrade.config.blacklist) {
+            if(PokemonProperties.Companion.parse(property, " ", "=").matches(pokemon)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
