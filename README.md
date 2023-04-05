@@ -25,7 +25,7 @@ It's a powerful api allowing for various formatting options for you as user.
 Refer to the default messages to see what placeholders are allowed where.
 
 - `wonderTradeFeedback` - The confirmation question that gets sent to the player when they do /wondertrade without confirmation
-  - be sure to leave the <wtconfirm> tag in as everything in that allows the player to click it to confirm the trade
+  - be sure to leave the `<wtconfirm>` tag in as everything in that allows the player to click it to confirm the trade
 - `cooldownFeedback` - message that gets sent when the player is on cooldown
 - `pokemonNotAllowed` - message that gets sent when a player attempts to trade a forbidden pokemon
 - `successFeedback` - message that get sent on successful trade
