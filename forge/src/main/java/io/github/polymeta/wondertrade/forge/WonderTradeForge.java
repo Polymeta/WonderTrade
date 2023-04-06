@@ -10,10 +10,6 @@ import net.minecraftforge.fml.common.Mod;
 public class WonderTradeForge {
 
     public WonderTradeForge() {
-        CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, battleVictoryEvent -> {
-            battleVictoryEvent.getBattle();
-            return Unit.INSTANCE;
-        });
         WonderTrade.init();
     }
 }
