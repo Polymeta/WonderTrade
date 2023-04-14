@@ -7,17 +7,20 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import io.github.polymeta.wondertrade.WonderTrade;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 
 public class RegeneratePool {
-    private static final Command<CommandSourceStack> Execute = (context) -> Regenerate(IntegerArgumentType.getInteger(context, "size"));
+    private static final Command<CommandSourceStack> Execute = (context) -> Regenerate(context, IntegerArgumentType.getInteger(context, "size"));
 
-    private static final Command<CommandSourceStack> ExecuteDefault = (context) -> Regenerate(WonderTrade.config.poolSize);
+    private static final Command<CommandSourceStack> ExecuteDefault = (context) -> Regenerate(context, WonderTrade.config.poolSize);
 
-    private static int Regenerate(int size) {
+    private static int Regenerate(CommandContext<CommandSourceStack> context, int size) {
         WonderTrade.regeneratePool(size);
+        context.getSource().sendSystemMessage(Component.literal("WonderTrade pool regenerated!"));
         return size;
     }
 

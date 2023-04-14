@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import io.github.polymeta.wondertrade.commands.RegeneratePool;
+import io.github.polymeta.wondertrade.commands.Reload;
 import io.github.polymeta.wondertrade.commands.Trade;
 import io.github.polymeta.wondertrade.configuration.BaseConfig;
 import io.github.polymeta.wondertrade.configuration.Pool;
@@ -55,6 +56,7 @@ public class WonderTrade {
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> {
             RegeneratePool.register(dispatcher);
             Trade.register(dispatcher);
+            Reload.register(dispatcher);
         });
         CobblemonEvents.SERVER_STARTED.subscribe(Priority.NORMAL, minecraftServer -> {
             if(WonderTrade.pool.pokemon.isEmpty()) {
@@ -77,7 +79,7 @@ public class WonderTrade {
         savePool();
     }
 
-    private static void loadConfig() {
+    public static void loadConfig() {
         var configFile = new File("config/wondertrade/main.json");
         configFile.getParentFile().mkdirs();
 
