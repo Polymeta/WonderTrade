@@ -25,6 +25,9 @@ public class BaseConfig {
     public boolean cooldownEnabled = true;
     public int cooldown = 5;
     public List<String> blacklist = new ArrayList<>();
+    public int poolMinLevel = 1;
+    public int poolMaxLevel = 100;
+    public boolean adjustNewPokemonToLevelRange = false;
 
     public MessageConfig messages = new MessageConfig();
 

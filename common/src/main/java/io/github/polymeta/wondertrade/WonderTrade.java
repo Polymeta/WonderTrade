@@ -107,6 +107,11 @@ public class WonderTrade {
         } else {
             config = new BaseConfig();
         }
+        if(config.poolMinLevel > config.poolMaxLevel) {
+            logger.warn("Pool min level can not be bigger than max level, adjusting range to 1-CobbleMaxLevel...");
+            config.poolMinLevel = 1;
+            config.poolMaxLevel = Cobblemon.config.getMaxPokemonLevel();
+        }
 
         saveConfig();
     }

@@ -82,6 +82,15 @@ public class Trade {
         var wonderPoke = WonderTrade.pool.pokemon.remove(rng.nextInt(WonderTrade.pool.pokemon.size()));
         var tookPoke = playerParty.remove(slot);
         var pokeAdded = playerParty.add(PokemonProperties.Companion.parse(wonderPoke, " ", "=").create());
+        if(WonderTrade.config.adjustNewPokemonToLevelRange) {
+            var level = slot.getLevel();
+            if(level > WonderTrade.config.poolMaxLevel) {
+                slot.setLevel(WonderTrade.config.poolMaxLevel);
+            }
+            else if (level < WonderTrade.config.poolMinLevel) {
+                slot.setLevel(WonderTrade.config.poolMinLevel);
+            }
+        }
         WonderTrade.pool.pokemon.add(slot.createPokemonProperties(PokemonPropertyExtractor.Companion.getALL()).asString(" "));
         WonderTrade.savePool();
         if(WonderTrade.config.cooldownEnabled && !canBypass) {
