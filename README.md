@@ -8,6 +8,7 @@ WonderTrader for Cobblemon working on both fabric and forge!
 | `/wondertrade <slot> [--confirm]` OR `/wt`      | `wondertrade.command.trade.base`   |
 | Bypass wondertrade cooldown                     | `wondertrade.command.trade.bypass` |
 | `/regenerate [<poolSize>]` OR `/regeneratepool` | `wondertrade.command.regenerate`   |
+| `/reloadwondertrade`                            | `wondertrade.command.reload`       |
 
 ## Config explanation
 
@@ -17,6 +18,10 @@ WonderTrader for Cobblemon working on both fabric and forge!
 - `cooldownEnabled` - Whether to enable cool-downs on the wondertrade command
 - `cooldown` - Cool-down in **MINUTES**. Only used if above value is set to `true`
 - `blacklist` - A list of Pokémon properties that can not be wondertraded, an example entry would be "cobblemon:charmander", but you can even get more complex as we use the pokemon properties under the hood. Refer to the wondertrade pool for more examples!
+- `poolMinLevel` & `poolMaxLevel` - Sets the level range of the pool that gets applied during generation of the pool
+  - _Note_: changing these values will require either manual fixing of the pool or running the /regenerate command to ensure all Pokémon in the pool are within the new level range
+- `adjustNewPokemonToLevelRange` - adjust Pokémon that get traded to be within the above level range
+  - _Example_: You have a poolMinLevel = 5 and a poolMaxLevel = 15, if a player trades a level 20 Pokémon, it gets inserted into the pool with level 15 instead
 
 ### Message Config
 
