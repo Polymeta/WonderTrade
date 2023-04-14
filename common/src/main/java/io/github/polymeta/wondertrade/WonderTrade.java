@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import io.github.polymeta.wondertrade.commands.RegeneratePool;
 import io.github.polymeta.wondertrade.commands.Reload;
@@ -70,10 +71,18 @@ public class WonderTrade {
 
     public static void regeneratePool(int size) {
         var randomProp = PokemonProperties.Companion.parse("species=random", " ", "=");
+        var blacklist = config.blacklist.stream().map(s -> PokemonProperties.Companion.parse(s, " ", "=")).toList();
         pool.pokemon.clear();
         for (int i = 0; i < size; i++) {
-            randomProp.setLevel(rng.nextInt(1, Cobblemon.config.getMaxPokemonLevel()));
-            var pokemon = randomProp.create();
+            randomProp.setLevel(rng.nextInt(Math.max(1, config.poolMinLevel), Math.min(Cobblemon.config.getMaxPokemonLevel(), config.poolMaxLevel)));
+            Pokemon pokemon;
+            while(true) {
+                pokemon = randomProp.create();
+                final Pokemon finalPokemon = pokemon;
+                if(blacklist.stream().noneMatch(prop -> prop.matches(finalPokemon))) {
+                    break;
+                }
+            }
             pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.Companion.getALL()).asString(" "));
         }
         savePool();
