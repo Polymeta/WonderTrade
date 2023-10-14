@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
 import io.github.polymeta.wondertrade.commands.RegeneratePool;
 import io.github.polymeta.wondertrade.commands.Reload;
 import io.github.polymeta.wondertrade.commands.Trade;
@@ -59,12 +60,11 @@ public class WonderTrade {
             Trade.register(dispatcher);
             Reload.register(dispatcher);
         });
-        CobblemonEvents.SERVER_STARTED.subscribe(Priority.NORMAL, minecraftServer -> {
+        LifecycleEvent.SERVER_STARTED.register((instance) -> {
             if(WonderTrade.pool.pokemon.isEmpty()) {
                 logger.info("Regenerating pool as it is empty");
                 WonderTrade.regeneratePool(WonderTrade.config.poolSize);
             }
-            return Unit.INSTANCE;
         });
         //TODO register message ticks
     }
@@ -83,7 +83,7 @@ public class WonderTrade {
                     break;
                 }
             }
-            pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.Companion.getALL()).asString(" "));
+            pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
         }
         savePool();
     }

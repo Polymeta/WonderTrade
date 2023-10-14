@@ -91,7 +91,7 @@ public class Trade {
                 slot.setLevel(WonderTrade.config.poolMinLevel);
             }
         }
-        WonderTrade.pool.pokemon.add(slot.createPokemonProperties(PokemonPropertyExtractor.Companion.getALL()).asString(" "));
+        WonderTrade.pool.pokemon.add(slot.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
         WonderTrade.savePool();
         if(WonderTrade.config.cooldownEnabled && !canBypass) {
             playersOnCooldown.add(player.getUUID());
