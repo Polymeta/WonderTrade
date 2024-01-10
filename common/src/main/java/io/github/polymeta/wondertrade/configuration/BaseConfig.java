@@ -33,12 +33,12 @@ public class BaseConfig {
 
     public static class MessageConfig {
         public String wonderTradeFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <white>Are you sure you want to trade your" +
-                " <aqua>lvl <level> <pokemon></aqua>?<wtconfirm><yellow> Click here to confirm!</wtconfirm>";
+                " <aqua>lvl <level> <pokemon> (<species>)</aqua>?<wtconfirm><yellow> Click here to confirm!</wtconfirm>";
         public String cooldownFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <red>You are on cooldown!";
         public String pokemonNotAllowed = "<gray>[<white>Wonder<red>Trade<gray>] <red>You cannot trade this pokemon!";
         public String successFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <green>Successfully traded!";
-        public String broadcastPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<white> <pokemon> got added to the wondertrade pool!";
-        public String broadcastShinyPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<yellow> Shiny <pokemon> got added to the wondertrade pool!";
+        public String broadcastPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<white> <pokemon> (<species>) got added to the wondertrade pool!";
+        public String broadcastShinyPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<yellow> Shiny <pokemon> (<species>) got added to the wondertrade pool!";
 
 
         public Component wonderTradeFeedback(Pokemon pokemon, int slot) {
@@ -51,7 +51,8 @@ public class BaseConfig {
 
             var text = miniMessage.deserialize(this.wonderTradeFeedback,
                     Placeholder.unparsed("level", String.valueOf(pokemon.getLevel())),
-                    Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()));
+                    Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
+                    Placeholder.unparsed("species", pokemon.getSpecies().getName()));
 
             return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
         }
@@ -72,7 +73,8 @@ public class BaseConfig {
                 return Component.empty();
             }
             var text = WonderTrade.miniMessage.deserialize(stringMessage,
-                    Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()));
+                    Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
+                    Placeholder.unparsed("species", pokemon.getSpecies().getName()));
             return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
         }
 

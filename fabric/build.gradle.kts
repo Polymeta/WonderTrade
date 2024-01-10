@@ -37,7 +37,7 @@ dependencies {
     shadowCommon("net.kyori:adventure-text-minimessage:${property("minimessage_version")}")
     shadowCommon("net.kyori:adventure-text-serializer-gson:${property("minimessage_version")}")
 
-    modImplementation("com.cobblemon:fabric:1.4.0+1.20.1-SNAPSHOT") { isTransitive = false }
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
 }
 
