@@ -10,6 +10,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class BaseConfig {
         public String broadcastShinyPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<yellow> Shiny <pokemon> (<species>) got added to the wondertrade pool!";
 
 
-        public Component wonderTradeFeedback(Pokemon pokemon, int slot) {
+        public Component wonderTradeFeedback(Pokemon pokemon, int slot, RegistryAccess registryAccess) {
             var miniMessage = MiniMessage.builder()
                     .tags(TagResolver.builder()
                             .resolvers(TagResolver.standard())
@@ -54,20 +55,20 @@ public class BaseConfig {
                     Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
                     Placeholder.unparsed("species", pokemon.getSpecies().getName()));
 
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
-        public Component cooldownFeedback() {
+        public Component cooldownFeedback(RegistryAccess registryAccess) {
             var text = WonderTrade.miniMessage.deserialize(this.cooldownFeedback);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
-        public Component successFeedback() {
+        public Component successFeedback(RegistryAccess registryAccess) {
             var text = WonderTrade.miniMessage.deserialize(this.successFeedback);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
-        public Component broadcastPokemon(Pokemon pokemon) {
+        public Component broadcastPokemon(Pokemon pokemon, RegistryAccess registryAccess) {
             var stringMessage = pokemon.getShiny() ? this.broadcastShinyPokemonAdded : broadcastPokemonAdded;
             if(stringMessage.isBlank() || stringMessage.isEmpty()) {
                 return Component.empty();
@@ -75,12 +76,12 @@ public class BaseConfig {
             var text = WonderTrade.miniMessage.deserialize(stringMessage,
                     Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
                     Placeholder.unparsed("species", pokemon.getSpecies().getName()));
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
-        public Component pokemonNotAllowed() {
+        public Component pokemonNotAllowed(RegistryAccess registryAccess) {
             var text = WonderTrade.miniMessage.deserialize(this.pokemonNotAllowed);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text));
+            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
     }
 }

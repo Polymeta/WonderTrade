@@ -48,14 +48,14 @@ public class Trade {
                 new CobblemonPermission("wondertrade.command.trade.bypass",
                         PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS));
         if(playersOnCooldown.contains(player.getUUID()) && !canBypass && WonderTrade.config.cooldownEnabled) {
-            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
+            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback(player.registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         if(isPokemonForbidden(slot) && !canBypass) {
-            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed());
+            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed(player.registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
-        player.sendSystemMessage(WonderTrade.config.messages.wonderTradeFeedback(slot, slotNo));
+        player.sendSystemMessage(WonderTrade.config.messages.wonderTradeFeedback(slot, slotNo, player.registryAccess()));
 
         return Command.SINGLE_SUCCESS;
     };
@@ -71,17 +71,17 @@ public class Trade {
                 new CobblemonPermission("wondertrade.command.trade.bypass",
                         PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS));
         if(playersOnCooldown.contains(player.getUUID()) && !canBypass && WonderTrade.config.cooldownEnabled) {
-            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback());
+            player.sendSystemMessage(WonderTrade.config.messages.cooldownFeedback(player.registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         if(isPokemonForbidden(slot) && !canBypass) {
-            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed());
+            player.sendSystemMessage(WonderTrade.config.messages.pokemonNotAllowed(player.registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         var playerParty = Cobblemon.INSTANCE.getStorage().getParty(player);
         var wonderPoke = WonderTrade.pool.pokemon.remove(rng.nextInt(WonderTrade.pool.pokemon.size()));
         var tookPoke = playerParty.remove(slot);
-        var pokeAdded = playerParty.add(PokemonProperties.Companion.parse(wonderPoke, " ", "=").create());
+        var pokeAdded = playerParty.add(PokemonProperties.Companion.parse(wonderPoke).create());
         if(WonderTrade.config.adjustNewPokemonToLevelRange) {
             var level = slot.getLevel();
             if(level > WonderTrade.config.poolMaxLevel) {
@@ -97,9 +97,9 @@ public class Trade {
             playersOnCooldown.add(player.getUUID());
             WonderTrade.scheduler.schedule(() -> {playersOnCooldown.remove(player.getUUID());}, WonderTrade.config.cooldown, TimeUnit.MINUTES);
         }
-        player.sendSystemMessage(WonderTrade.config.messages.successFeedback());
+        player.sendSystemMessage(WonderTrade.config.messages.successFeedback(player.registryAccess()));
         var server = player.getServer();
-        var broadcastMessage = WonderTrade.config.messages.broadcastPokemon(slot);
+        var broadcastMessage = WonderTrade.config.messages.broadcastPokemon(slot, player.registryAccess());
         if(server != null && !broadcastMessage.equals(Component.empty())) {
             server.getPlayerList().broadcastSystemMessage(broadcastMessage, false);
         }
@@ -108,7 +108,7 @@ public class Trade {
 
     private static boolean isPokemonForbidden(Pokemon pokemon) {
         for (String property : WonderTrade.config.blacklist) {
-            if(PokemonProperties.Companion.parse(property, " ", "=").matches(pokemon)) {
+            if(PokemonProperties.Companion.parse(property).matches(pokemon)) {
                 return true;
             }
         }

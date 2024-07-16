@@ -7,10 +7,10 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
-archivesBaseName = rootProject.archives_base_name + "-forge"
+archivesBaseName = rootProject.archives_base_name + "-neoforge"
 
 loom {
     silentMojangMappingsLicense()
@@ -36,11 +36,11 @@ dependencies {
     minecraft("com.mojang:minecraft:${rootProject.minecraft_version}")
     // The following line declares the mojmap mappings, you may use other mappings as well
     mappings(loom.officialMojangMappings())
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
     // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
 
-    modImplementation("com.cobblemon:forge:${property("cobblemon_version")}")
+    modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}")
 
     forgeRuntimeLibrary("net.kyori:adventure-text-minimessage:${property("minimessage_version")}")
     forgeRuntimeLibrary("net.kyori:adventure-text-serializer-gson:${property("minimessage_version")}")
@@ -68,17 +68,17 @@ shadowJar {
     relocate 'net.kyori', 'io.github.polymeta.wondertrade.shadow.net.kyori'
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    //classifier "dev-shadow"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier null
+    //classifier null
 }
 
 jar {
-    classifier "dev"
+    //classifier "dev"
 }
 
 sourcesJar {

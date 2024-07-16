@@ -1,8 +1,6 @@
 package io.github.polymeta.wondertrade;
 
 import com.cobblemon.mod.common.Cobblemon;
-import com.cobblemon.mod.common.api.Priority;
-import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -13,7 +11,6 @@ import io.github.polymeta.wondertrade.commands.Reload;
 import io.github.polymeta.wondertrade.commands.Trade;
 import io.github.polymeta.wondertrade.configuration.BaseConfig;
 import io.github.polymeta.wondertrade.configuration.Pool;
-import kotlin.Unit;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,8 +67,8 @@ public class WonderTrade {
     }
 
     public static void regeneratePool(int size) {
-        var randomProp = PokemonProperties.Companion.parse("species=random", " ", "=");
-        var blacklist = config.blacklist.stream().map(s -> PokemonProperties.Companion.parse(s, " ", "=")).toList();
+        var randomProp = PokemonProperties.Companion.parse("species=random");
+        var blacklist = config.blacklist.stream().map(PokemonProperties.Companion::parse).toList();
         pool.pokemon.clear();
         for (int i = 0; i < size; i++) {
             randomProp.setLevel(rng.nextInt(Math.max(1, config.poolMinLevel), Math.min(Cobblemon.config.getMaxPokemonLevel(), config.poolMaxLevel)));
