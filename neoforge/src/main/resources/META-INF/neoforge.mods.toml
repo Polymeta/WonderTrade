@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[1,)"
 issueTrackerURL = "https://github.com/Polymeta/WonderTrade/issues"
 license = "MIT License"
 
@@ -16,7 +16,7 @@ A wondertrade sidemod written for cobblemon
 [[dependencies.wondertrade]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[20.6,)"
+versionRange = "[21.0.14-beta,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -30,7 +30,7 @@ side = "BOTH"
 [[dependencies.wondertrade]]
 modId = "architectury"
 mandatory = true
-versionRange = "[13.0.0,)"
+versionRange = "[13.0.1,)"
 ordering = "AFTER"
 side = "BOTH"
 

@@ -16,9 +16,10 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven(url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
         maven("https://maven.impactdev.net/repository/development/")
-        maven(url = "https://maven.neoforged.net/releases")
+        maven("https://maven.neoforged.net/releases")
+        maven("https://thedarkcolour.github.io/KotlinForForge/")
     }
 
     java {
