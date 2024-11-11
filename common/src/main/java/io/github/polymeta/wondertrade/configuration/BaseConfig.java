@@ -50,22 +50,18 @@ public class BaseConfig {
                             .build())
                     .build();
 
-            var text = miniMessage.deserialize(this.wonderTradeFeedback,
+            return TextUtil.styledText(miniMessage, this.wonderTradeFeedback, registryAccess,
                     Placeholder.unparsed("level", String.valueOf(pokemon.getLevel())),
                     Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
                     Placeholder.unparsed("species", pokemon.getSpecies().getName()));
-
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
         public Component cooldownFeedback(RegistryAccess registryAccess) {
-            var text = WonderTrade.miniMessage.deserialize(this.cooldownFeedback);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
+            return TextUtil.styledText(this.cooldownFeedback, registryAccess);
         }
 
         public Component successFeedback(RegistryAccess registryAccess) {
-            var text = WonderTrade.miniMessage.deserialize(this.successFeedback);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
+            return TextUtil.styledText(this.successFeedback, registryAccess);
         }
 
         public Component broadcastPokemon(Pokemon pokemon, RegistryAccess registryAccess) {
@@ -73,15 +69,13 @@ public class BaseConfig {
             if(stringMessage.isBlank() || stringMessage.isEmpty()) {
                 return Component.empty();
             }
-            var text = WonderTrade.miniMessage.deserialize(stringMessage,
+            return TextUtil.styledText(stringMessage, registryAccess,
                     Placeholder.unparsed("pokemon", pokemon.getDisplayName().getString()),
                     Placeholder.unparsed("species", pokemon.getSpecies().getName()));
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
         }
 
         public Component pokemonNotAllowed(RegistryAccess registryAccess) {
-            var text = WonderTrade.miniMessage.deserialize(this.pokemonNotAllowed);
-            return Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(text), registryAccess);
+            return TextUtil.styledText(this.pokemonNotAllowed, registryAccess);
         }
     }
 }

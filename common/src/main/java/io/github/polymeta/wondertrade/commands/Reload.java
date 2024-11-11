@@ -15,7 +15,7 @@ public class Reload {
         var regenCommand = dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("reloadwondertrade")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
-                                new CobblemonPermission("wondertrade.command.reload", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)))
+                                new CobblemonPermission("wondertrade.command.reload", PermissionLevel.ALL_COMMANDS)))
                         .executes(ctx -> {
                             WonderTrade.loadConfig();
                             ctx.getSource().sendSystemMessage(Component.literal("Config reloaded, check console for errors"));

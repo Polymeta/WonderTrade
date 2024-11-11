@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -32,6 +33,7 @@ public class WonderTrade {
 
     public static BaseConfig config;
     public static Pool pool;
+    public static AtomicBoolean regenerating = new AtomicBoolean(false);
     public static ScheduledThreadPoolExecutor scheduler;
     public static ForkJoinPool worker;
 
@@ -63,26 +65,47 @@ public class WonderTrade {
                 WonderTrade.regeneratePool(WonderTrade.config.poolSize);
             }
         });
-        //TODO register message ticks
+        LifecycleEvent.SERVER_STOPPING.register(instance -> {
+            scheduler.shutdownNow();
+            worker.shutdownNow();
+        });
     }
 
-    public static void regeneratePool(int size) {
-        var randomProp = PokemonProperties.Companion.parse("species=random");
-        var blacklist = config.blacklist.stream().map(PokemonProperties.Companion::parse).toList();
-        pool.pokemon.clear();
-        for (int i = 0; i < size; i++) {
-            randomProp.setLevel(rng.nextInt(Math.max(1, config.poolMinLevel), Math.min(Cobblemon.config.getMaxPokemonLevel(), config.poolMaxLevel)));
-            Pokemon pokemon;
-            while(true) {
-                pokemon = randomProp.create();
-                final Pokemon finalPokemon = pokemon;
-                if(blacklist.stream().noneMatch(prop -> prop.matches(finalPokemon))) {
-                    break;
-                }
-            }
-            pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
+    public static void regeneratePool(int size)
+    {
+        if(regenerating.get())
+        {
+            return;
         }
-        savePool();
+        worker.execute(() -> {
+            regenerating.set(true);
+            var randomProp = PokemonProperties.Companion.parse("species=random");
+            var blacklist = config.blacklist.stream().map(PokemonProperties.Companion::parse).toList();
+            pool.pokemon.clear();
+            for (int i = 0; i < size; i++) {
+                randomProp.setLevel(rng.nextInt(Math.max(1, config.poolMinLevel), Math.min(Cobblemon.config.getMaxPokemonLevel(), config.poolMaxLevel)));
+                Pokemon pokemon;
+                var retryCount = 0;
+                do
+                {
+                    pokemon = randomProp.create();
+                    final Pokemon finalPokemon = pokemon;
+                    if(blacklist.stream().noneMatch(prop -> prop.matches(finalPokemon)))
+                    {
+                        break;
+                    }
+                    retryCount++;
+                } while(retryCount <= 50);
+                if(retryCount >= 50)
+                {
+                    logger.error("Failed to regenerate pool! WonderTrade is now in a potentially broken state. Please review the config and try again.");
+                    return;
+                }
+                pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
+            }
+            savePool();
+            regenerating.set(false);
+        });
     }
 
     public static void loadConfig() {

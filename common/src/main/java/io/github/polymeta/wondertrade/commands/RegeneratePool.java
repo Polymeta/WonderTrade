@@ -19,6 +19,10 @@ public class RegeneratePool {
     private static final Command<CommandSourceStack> ExecuteDefault = (context) -> Regenerate(context, WonderTrade.config.poolSize);
 
     private static int Regenerate(CommandContext<CommandSourceStack> context, int size) {
+        if(WonderTrade.regenerating.get()) {
+            context.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+            return Command.SINGLE_SUCCESS;
+        }
         WonderTrade.regeneratePool(size);
         context.getSource().sendSystemMessage(Component.literal("WonderTrade pool regenerated!"));
         return size;
@@ -28,7 +32,7 @@ public class RegeneratePool {
         var regenCommand = dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("regenerate")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
-                                new CobblemonPermission("wondertrade.command.regenerate", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)))
+                                new CobblemonPermission("wondertrade.command.regenerate", PermissionLevel.ALL_COMMANDS)))
                         .then(Commands.argument("size", IntegerArgumentType.integer(1)).executes(Execute))
                         .executes(ExecuteDefault)
         );
