@@ -27,6 +27,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
     modRuntimeOnly("dev.architectury", "architectury-fabric", property("architectury_version").toString()) { isTransitive = false }
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
