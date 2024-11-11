@@ -3,13 +3,12 @@ package io.github.polymeta.wondertrade.configuration;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.polymeta.wondertrade.WonderTrade;
+import io.github.polymeta.wondertrade.util.TextUtil;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 
@@ -31,6 +30,46 @@ public class BaseConfig {
     public boolean adjustNewPokemonToLevelRange = false;
 
     public MessageConfig messages = new MessageConfig();
+    public GuiConfig gui = new GuiConfig();
+
+    public static class GuiConfig {
+        public boolean generateBorders = true;
+        public String mainWindowTitle = "<white>Wonder<red>Trade";
+        public String confirmationWindowTitle = "<red>Confirm Trade";
+        public String poolWindowTitle = "<white>Wonder<red>Trade <white>Pool";
+        //main gui
+        public ButtonConfig cancelButton = new ButtonConfig(22, "minecraft:barrier", "<red>Cancel");
+        //confirmation gui
+        public ButtonConfig denyButton = new ButtonConfig(11, "minecraft:red_wool", "<red>Go Back");
+        public ButtonConfig confirmationButton = new ButtonConfig(15, "minecraft:green_wool", "<green>Confirm Trade");
+        //pool gui
+        public ButtonConfig prevPageButton = new ButtonConfig(45, "cobblemon:poke_ball", "<white>Previous Page");
+        public ButtonConfig nextPageButton = new ButtonConfig(53, "cobblemon:poke_ball", "<white>Next Page");
+
+        public Component mainWindowTitle(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.mainWindowTitle, registryAccess);
+        }
+
+        public Component confirmationWindowTitle(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.confirmationWindowTitle, registryAccess);
+        }
+
+        public Component poolWindowTitle(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.poolWindowTitle, registryAccess);
+        }
+    }
+
+    public static class ButtonConfig {
+        public String item;
+        public String customName;
+        public int position;
+        public ButtonConfig(int position, String item, String customName)
+        {
+            this.position = position;
+            this.customName = customName;
+            this.item = item;
+        }
+    }
 
     public static class MessageConfig {
         public String wonderTradeFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <white>Are you sure you want to trade your" +
