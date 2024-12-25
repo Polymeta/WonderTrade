@@ -5,6 +5,8 @@ WonderTrader for Cobblemon working on both fabric and forge!
 
 | Command                                         | Permission                         |
 |-------------------------------------------------|------------------------------------|
+| `/wondertrade` or `/wt`                         | `wondertrade.command.trade.base`   |
+| `/wondertrade pool`                             | `wondertrade.command.trade.base`   |
 | `/wondertrade <slot> [--confirm]` OR `/wt`      | `wondertrade.command.trade.base`   |
 | Bypass wondertrade cooldown                     | `wondertrade.command.trade.bypass` |
 | `/regenerate [<poolSize>]` OR `/regeneratepool` | `wondertrade.command.regenerate`   |
