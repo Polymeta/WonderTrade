@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.permission.CobblemonPermission;
 import com.cobblemon.mod.common.api.permission.PermissionLevel;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
-import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import io.github.polymeta.wondertrade.WonderTrade;
 import net.minecraft.network.chat.Component;
@@ -41,7 +40,7 @@ public class TradeUtil
         var playerParty = Cobblemon.INSTANCE.getStorage().getParty(player);
         var wonderPoke = WonderTrade.pool.pokemon.remove(rng.nextInt(WonderTrade.pool.pokemon.size()));
         var tookPoke = playerParty.remove(slot);
-        var pokeAdded = playerParty.add(PokemonProperties.Companion.parse(wonderPoke).create());
+        var pokeAdded = playerParty.add(PokemonCodec.decode(wonderPoke));
         if(WonderTrade.config.adjustNewPokemonToLevelRange) {
             var level = slot.getLevel();
             if(level > WonderTrade.config.poolMaxLevel) {
@@ -51,7 +50,7 @@ public class TradeUtil
                 slot.setLevel(WonderTrade.config.poolMinLevel);
             }
         }
-        WonderTrade.pool.pokemon.add(slot.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
+        WonderTrade.pool.pokemon.add(PokemonCodec.encode(slot));
         WonderTrade.savePool();
         if(WonderTrade.config.cooldownEnabled && !canBypass) {
             playersOnCooldown.add(player.getUUID());

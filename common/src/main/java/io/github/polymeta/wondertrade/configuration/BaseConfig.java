@@ -79,6 +79,9 @@ public class BaseConfig {
         public String successFeedback = "<gray>[<white>Wonder<red>Trade<gray>] <green>Successfully traded!";
         public String broadcastPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<white> <pokemon> (<species>) got added to the wondertrade pool!";
         public String broadcastShinyPokemonAdded = "<gray>[<white>Wonder<red>Trade<gray>]<yellow> Shiny <pokemon> (<species>) got added to the wondertrade pool!";
+        public String poolRegenerating = "<gray>[<white>Wonder<red>Trade<gray>] <red>The pool is being regenerated!";
+        public String poolRegenerated = "<gray>[<white>Wonder<red>Trade<gray>] <green>Pool regenerated!";
+        public String configReloaded = "<gray>[<white>Wonder<red>Trade<gray>] <green>Config reloaded, check the console for errors.";
 
 
         public Component wonderTradeFeedback(Pokemon pokemon, int slot, RegistryAccess registryAccess) {
@@ -115,6 +118,18 @@ public class BaseConfig {
 
         public Component pokemonNotAllowed(RegistryAccess registryAccess) {
             return TextUtil.styledText(this.pokemonNotAllowed, registryAccess);
+        }
+
+        public Component poolRegenerating(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.poolRegenerating, registryAccess);
+        }
+
+        public Component poolRegenerated(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.poolRegenerated, registryAccess);
+        }
+
+        public Component configReloaded(RegistryAccess registryAccess) {
+            return TextUtil.styledText(this.configReloaded, registryAccess);
         }
     }
 }

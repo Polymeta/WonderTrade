@@ -11,7 +11,6 @@ import com.mojang.brigadier.context.CommandContext;
 import io.github.polymeta.wondertrade.WonderTrade;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 
 public class RegeneratePool {
     private static final Command<CommandSourceStack> Execute = (context) -> Regenerate(context, IntegerArgumentType.getInteger(context, "size"));
@@ -20,11 +19,11 @@ public class RegeneratePool {
 
     private static int Regenerate(CommandContext<CommandSourceStack> context, int size) {
         if(WonderTrade.regenerating.get()) {
-            context.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+            context.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerating(context.getSource().registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         WonderTrade.regeneratePool(size);
-        context.getSource().sendSystemMessage(Component.literal("WonderTrade pool regenerated!"));
+        context.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerated(context.getSource().registryAccess()));
         return size;
     }
 
