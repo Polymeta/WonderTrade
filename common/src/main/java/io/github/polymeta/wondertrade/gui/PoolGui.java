@@ -1,9 +1,9 @@
 package io.github.polymeta.wondertrade.gui;
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.item.PokemonItem;
 import io.github.polymeta.wondertrade.WonderTrade;
 import io.github.polymeta.wondertrade.util.GuiUtil;
+import io.github.polymeta.wondertrade.util.PokemonCodec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,8 +48,8 @@ public class PoolGui implements MenuProvider
         var pageContent = WonderTrade.pool.pokemon.stream()
                                   .skip((long) this.pageNumber * this.pageSize)
                                   .limit(this.pageSize)
-                                  .map(PokemonProperties.Companion::parse)
-                                  .map(PokemonItem::from)
+                                  .map(PokemonCodec::decode)
+                                  .map(pokemon -> PokemonItem.from(pokemon, 1))
                                   .toList();
 
         for(int i = 0; i < pageContent.size(); i++)

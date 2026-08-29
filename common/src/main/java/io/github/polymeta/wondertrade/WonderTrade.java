@@ -2,7 +2,6 @@ package io.github.polymeta.wondertrade;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
-import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -11,6 +10,7 @@ import io.github.polymeta.wondertrade.commands.Reload;
 import io.github.polymeta.wondertrade.commands.Trade;
 import io.github.polymeta.wondertrade.configuration.BaseConfig;
 import io.github.polymeta.wondertrade.configuration.Pool;
+import io.github.polymeta.wondertrade.util.PokemonCodec;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,7 +101,7 @@ public class WonderTrade {
                     logger.error("Failed to regenerate pool! WonderTrade is now in a potentially broken state. Please review the config and try again.");
                     return;
                 }
-                pool.pokemon.add(pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL).asString(" "));
+                pool.pokemon.add(PokemonCodec.encode(pokemon));
             }
             savePool();
             regenerating.set(false);

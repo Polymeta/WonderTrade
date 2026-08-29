@@ -15,7 +15,6 @@ import io.github.polymeta.wondertrade.gui.TradePartyGui;
 import io.github.polymeta.wondertrade.util.TradeUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 
 public class Trade {
 
@@ -30,7 +29,7 @@ public class Trade {
                         .then(Commands.literal("pool")
                                       .executes(ctx -> {
                                           if(WonderTrade.regenerating.get()) {
-                                              ctx.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+                                              ctx.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerating(ctx.getSource().registryAccess()));
                                               return Command.SINGLE_SUCCESS;
                                           }
                                           var player = ctx.getSource().getPlayerOrException();
@@ -41,7 +40,7 @@ public class Trade {
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req, new CobblemonPermission("wondertrade.command.trade.base", PermissionLevel.NONE)))
                         .executes(ctx ->  {
                             if(WonderTrade.regenerating.get()) {
-                                ctx.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+                                ctx.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerating(ctx.getSource().registryAccess()));
                                 return Command.SINGLE_SUCCESS;
                             }
                             var player = ctx.getSource().getPlayerOrException();
@@ -56,12 +55,17 @@ public class Trade {
                             return 1;
                         })
         );
-        dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("wt").redirect(tradeCommand));
+        // A redirect only forwards further arguments, so the alias needs the target's
+        // own command to answer a bare "/wt".
+        dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("wt")
+                                    .requires(tradeCommand.getRequirement())
+                                    .executes(tradeCommand.getCommand())
+                                    .redirect(tradeCommand));
     }
 
     private static final Command<CommandSourceStack> Execute = context -> {
         if(WonderTrade.regenerating.get()) {
-            context.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+            context.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerating(context.getSource().registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         var slot = PartySlotArgumentType.Companion.getPokemon(context, "slot");
@@ -85,7 +89,7 @@ public class Trade {
 
     private static final Command<CommandSourceStack> ExecuteWithConfirm = context -> {
         if(WonderTrade.regenerating.get()) {
-            context.getSource().sendSystemMessage(Component.literal("The WonderTrade pool is being regenerated!"));
+            context.getSource().sendSystemMessage(WonderTrade.config.messages.poolRegenerating(context.getSource().registryAccess()));
             return Command.SINGLE_SUCCESS;
         }
         var slot = PartySlotArgumentType.Companion.getPokemon(context, "slot");

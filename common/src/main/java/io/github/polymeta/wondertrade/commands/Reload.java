@@ -8,20 +8,18 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.polymeta.wondertrade.WonderTrade;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 
 public class Reload {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        var regenCommand = dispatcher.register(
+        dispatcher.register(
                 LiteralArgumentBuilder.<CommandSourceStack>literal("reloadwondertrade")
                         .requires(req -> Cobblemon.INSTANCE.getPermissionValidator().hasPermission(req,
                                 new CobblemonPermission("wondertrade.command.reload", PermissionLevel.ALL_COMMANDS)))
                         .executes(ctx -> {
                             WonderTrade.loadConfig();
-                            ctx.getSource().sendSystemMessage(Component.literal("Config reloaded, check console for errors"));
+                            ctx.getSource().sendSystemMessage(WonderTrade.config.messages.configReloaded(ctx.getSource().registryAccess()));
                             return Command.SINGLE_SUCCESS;
                         })
         );
-        dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("regeneratepool").redirect(regenCommand));
     }
 }
